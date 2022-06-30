@@ -3,14 +3,16 @@ import 'package:geocoder2/src/modal/fetch_geocoder.dart';
 import 'package:http/http.dart' as http;
 
 class Geocoder2 {
-  static Future<GeoData> getDataFromCoordinates(
-      {required double latitude,
-      required double longitude,
-      required String googleMapApiKey}) async {
+  static Future<GeoData> getDataFromCoordinates({
+    required double latitude,
+    required double longitude,
+    required String googleMapApiKey,
+    required String language,
+  }) async {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$googleMapApiKey'));
+            'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$googleMapApiKey&language=$language'));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String data = await response.stream.bytesToString();
@@ -62,11 +64,12 @@ class Geocoder2 {
   static Future<GeoData> getDataFromAddress({
     required String address,
     required String googleMapApiKey,
+    required String language,
   }) async {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=$googleMapApiKey'));
+            'https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=$googleMapApiKey&language=$language'));
 
     http.StreamedResponse response = await request.send();
 
